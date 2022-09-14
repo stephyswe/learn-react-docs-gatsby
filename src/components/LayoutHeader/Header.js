@@ -4,21 +4,20 @@
  * @emails react-core
  * @flow
  */
-import React from 'react';
-import {Link} from 'gatsby';
-
-import {colors, fonts, media} from 'theme';
 
 import SurveyBanner from 'components/SurveyBanner';
 import SocialBanner from 'components/SocialBanner';
 import Container from 'components/Container';
-
+import HeaderLink from './HeaderLink';
+import {Link} from 'gatsby';
+import React from 'react';
+import {colors, fonts, media} from 'theme';
 import {version} from 'site-constants';
-
 import ExternalLinkSvg from 'templates/components/ExternalLinkSvg';
+import DocSearch from './DocSearch';
 
 // $FlowFixMe
-/* import navHeader from '../../../content/headerNav.yml'; */
+import navHeader from '../../../content/headerNav.yml';
 
 import logoSvg from 'icons/logo.svg';
 
@@ -146,17 +145,17 @@ const Header = ({location}: {location: Location}) => (
                 'linear-gradient(to right, transparent, black 20px, black 90%, transparent)',
             },
           }}>
-          {/* {navHeader.items.map(link => (
+          {navHeader.items.map(link => (
             <HeaderLink
               key={link.title}
               isActive={location.pathname.includes(link.activeSelector)}
               title={link.title}
               to={link.to}
             />
-          ))} */}
+          ))}
         </nav>
 
-        {/* <DocSearch /> */}
+        <DocSearch />
 
         <div
           css={{

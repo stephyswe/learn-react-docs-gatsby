@@ -13,5 +13,5 @@ module.exports = {
     rssFeedTitle: 'React',
     rssFeedDescription: 'A JavaScript library for building user interfaces',
   },
-  plugins: [],
+  plugins: ['gatsby-plugin-glamor'],
 };

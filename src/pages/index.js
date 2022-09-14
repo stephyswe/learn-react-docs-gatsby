@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
+import Layout from '../components/Layout';
 
 class Home extends Component {
   render() {
-    return (
-      <div>New Site</div>
-    );
+    const {data, location} = this.props;
+    return <Layout location={location}>New Site</Layout>;
   }
 }
 

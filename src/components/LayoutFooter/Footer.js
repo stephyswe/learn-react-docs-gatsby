@@ -7,20 +7,21 @@
 
 import React from 'react';
 
+import {colors, media} from 'theme';
+
 import Container from 'components/Container';
+import MetaTitle from 'templates/components/MetaTitle';
 
 import FooterNav from './FooterNav';
-
-import {colors, media} from 'theme';
+import ExternalFooterLink from './ExternalFooterLink';
+import SectionLinks from './SectionLinks';
+import FooterLink from './FooterLink';
+import {sectionListCommunity, sectionListDocs} from 'utils/sectionList';
 
 // $FlowFixMe
 import navFooter from '../../../content/footerNav.yml';
 
 import ossLogoPng from 'images/oss_logo.png';
-
-import MetaTitle from 'templates/components/MetaTitle';
-import ExternalFooterLink from './ExternalFooterLink';
-import SectionLinks from './SectionLinks';
 
 const Footer = ({layoutHasSidebar = false}: {layoutHasSidebar: boolean}) => (
   <footer
@@ -70,6 +71,34 @@ const Footer = ({layoutHasSidebar = false}: {layoutHasSidebar: boolean}) => (
           }}>
           <FooterNav layoutHasSidebar={layoutHasSidebar}>
             <MetaTitle onDark={true}>{navFooter.docs.title}</MetaTitle>
+            {sectionListDocs.map(section => {
+              const defaultItem = section.items[0];
+              return (
+                <FooterLink
+                  to={`/docs/${defaultItem.id}.html`}
+                  key={section.title}>
+                  {section.title}
+                </FooterLink>
+              );
+            })}
+          </FooterNav>
+          <FooterNav layoutHasSidebar={layoutHasSidebar}>
+            <MetaTitle onDark={true}>{navFooter.channels.title}</MetaTitle>
+            <SectionLinks links={navFooter.channels.items} />
+          </FooterNav>
+          <FooterNav layoutHasSidebar={layoutHasSidebar}>
+            <MetaTitle onDark={true}>{navFooter.community.title}</MetaTitle>
+            <ExternalFooterLink
+              href={`https://github.com/facebook/react/blob/main/CODE_OF_CONDUCT.md`}>
+              Code of Conduct
+            </ExternalFooterLink>
+            {sectionListCommunity.map(section => (
+              <FooterLink
+                to={`/community/${section.items[0].id}.html`}
+                key={section.title}>
+                {section.title}
+              </FooterLink>
+            ))}
           </FooterNav>
           <FooterNav layoutHasSidebar={layoutHasSidebar}>
             <MetaTitle onDark={true}>{navFooter.more.title}</MetaTitle>

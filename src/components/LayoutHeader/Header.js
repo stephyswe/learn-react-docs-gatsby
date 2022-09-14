@@ -155,7 +155,7 @@ const Header = ({location}: {location: Location}) => (
           ))}
         </nav>
 
-        <DocSearch />
+        {/*  <DocSearch /> */}
 
         <div
           css={{

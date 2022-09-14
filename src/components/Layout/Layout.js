@@ -1,3 +1,4 @@
+
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -7,6 +8,7 @@
 
 import React, {Component} from 'react';
 import Flex from 'components/Flex';
+import Header from 'components/LayoutHeader';
 import Footer from 'components/LayoutFooter';
 import {media} from 'theme';
 
@@ -26,6 +28,7 @@ class Template extends Component<Props> {
           flexDirection: 'column',
           minHeight: 'calc(100vh - 40px)',
         }}>
+        <Header location={location} />
         <Flex
           direction="column"
           shrink="0"

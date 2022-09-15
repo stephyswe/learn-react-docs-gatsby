@@ -12,10 +12,10 @@ import NavigationFooter from 'templates/components/NavigationFooter';
 // $FlowFixMe Update Flow
 import React from 'react';
 import TitleAndMetaTags from 'components/TitleAndMetaTags';
-
+import FeedbackForm from 'components/FeedbackForm';
 import toCommaSeparatedList from 'utils/toCommaSeparatedList';
 import createCanonicalUrl from 'utils/createCanonicalUrl';
-import {sharedStyles, media, fonts} from 'theme';
+import {sharedStyles, colors, media, fonts} from 'theme';
 
 import type {Node} from 'types';
 
@@ -115,6 +115,26 @@ const MarkdownPage = ({
                   css={[sharedStyles.markdown]}
                   dangerouslySetInnerHTML={{__html: markdownRemark.html}}
                 />
+
+                {markdownRemark.fields.path && (
+                  <div css={{marginTop: 80}}>
+                    <span
+                      css={{
+                        whiteSpace: 'nowrap',
+                        paddingBottom: '1em',
+                        marginRight: '36px',
+                        display: 'inline-block',
+                        color: colors.subtle,
+                      }}>
+                      <FeedbackForm />
+                    </span>
+                    <a
+                      css={sharedStyles.articleLayout.editLink}
+                      href={`https://github.com/reactjs/reactjs.org/tree/main/${markdownRemark.fields.path}`}>
+                      Edit this page
+                    </a>
+                  </div>
+                )}
               </div>
             </Flex>
           </div>

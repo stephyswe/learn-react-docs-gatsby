@@ -93,6 +93,13 @@ const MarkdownPage = ({
                   )}
                 </div>
               )}
+
+              <div css={sharedStyles.articleLayout.content}>
+                <div
+                  css={[sharedStyles.markdown]}
+                  dangerouslySetInnerHTML={{__html: markdownRemark.html}}
+                />
+              </div>
             </Flex>
           </div>
         </Container>

@@ -1,0 +1,104 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * @emails react-core
+ * @flow
+ */
+
+import Container from 'components/Container';
+import Flex from 'components/Flex';
+import MarkdownHeader from 'components/MarkdownHeader';
+// $FlowFixMe Update Flow
+import React from 'react';
+import TitleAndMetaTags from 'components/TitleAndMetaTags';
+
+import toCommaSeparatedList from 'utils/toCommaSeparatedList';
+import createCanonicalUrl from 'utils/createCanonicalUrl';
+import {sharedStyles, media, fonts} from 'theme';
+
+import type {Node} from 'types';
+
+type Props = {
+  authors: Array<string>,
+  createLink: Function, // TODO: Add better flow type once we Flow-type createLink
+  date?: string,
+  enableScrollSync?: boolean,
+  ogDescription: string,
+  location: Location,
+  markdownRemark: Node,
+  sectionList: Array<Object>, // TODO: Add better flow type once we have the Section component
+  titlePostfix: string,
+};
+
+const MarkdownPage = ({
+  authors = [],
+  createLink,
+  date,
+  enableScrollSync,
+  ogDescription,
+  location,
+  markdownRemark,
+  sectionList,
+  titlePostfix = '',
+}: Props) => {
+  const hasAuthors = authors.length > 0;
+  const titlePrefix = markdownRemark.frontmatter.title || '';
+
+  return (
+    <Flex
+      direction="column"
+      grow="1"
+      shrink="0"
+      halign="stretch"
+      css={{
+        width: '100%',
+        flex: '1 0 auto',
+        position: 'relative',
+        zIndex: 0,
+        '& h1, & h2, & h3, & h4, & h5, & h6': {
+          scrollMarginTop: fonts.header.fontSize,
+
+          [media.lessThan('medium')]: {
+            scrollMarginTop: fonts.header[media.lessThan('medium')].fontSize,
+          },
+        },
+      }}>
+      <TitleAndMetaTags
+        ogDescription={ogDescription}
+        ogType="article"
+        canonicalUrl={createCanonicalUrl(markdownRemark.fields.slug)}
+        title={`${titlePrefix}${titlePostfix}`}
+      />
+      <div css={{flex: '1 0 auto'}}>
+        <Container>
+          <div css={sharedStyles.articleLayout.container}>
+            <Flex type="article" direction="column" grow="1" halign="stretch">
+              <MarkdownHeader title={titlePrefix} />
+
+              {(date || hasAuthors) && (
+                <div css={{marginTop: 15}}>
+                  {date}{' '}
+                  {hasAuthors && (
+                    <span css={{lineHeight: 1.75}}>
+                      by{' '}
+                      {toCommaSeparatedList(authors, author => (
+                        <a
+                          css={sharedStyles.link}
+                          href={author.frontmatter.url}
+                          key={author.frontmatter.name}>
+                          {author.frontmatter.name}
+                        </a>
+                      ))}
+                    </span>
+                  )}
+                </div>
+              )}
+            </Flex>
+          </div>
+        </Container>
+      </div>
+    </Flex>
+  );
+};
+
+export default MarkdownPage;

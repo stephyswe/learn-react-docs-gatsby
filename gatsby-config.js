@@ -15,12 +15,19 @@ module.exports = {
   },
   plugins: [
     'gatsby-plugin-glamor',
-
+    'gatsby-transformer-home-example-code',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'content',
         path: `${__dirname}/content/`,
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'pages',
+        path: `${__dirname}/src/pages`,
       },
     },
     {

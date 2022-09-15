@@ -4,26 +4,49 @@
  * @emails react-core
  */
 
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {graphql} from 'gatsby';
-
-import Layout from 'components/Layout';
+import ButtonLink from 'components/ButtonLink';
 import Container from 'components/Container';
 import Flex from 'components/Flex';
+import CodeExample from 'components/CodeExample';
+import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import {graphql} from 'gatsby';
 import TitleAndMetaTags from 'components/TitleAndMetaTags';
-import ButtonLink from 'components/ButtonLink';
-
+import Layout from 'components/Layout';
 import {colors, media, sharedStyles} from 'theme';
-
+import loadScript from 'utils/loadScript';
 import createCanonicalUrl from 'utils/createCanonicalUrl';
-
+import {babelURL} from 'site-constants';
 import logoWhiteSvg from 'icons/logo-white.svg';
 
 class Home extends Component {
+  state = {
+    babelLoaded: false,
+  };
+
+  componentDidMount() {
+    loadScript(babelURL).then(
+      () => {
+        this.setState({
+          babelLoaded: true,
+        });
+      },
+      error => {
+        console.error('Babel failed to load.');
+      },
+    );
+  }
+
   render() {
+    const {babelLoaded} = this.state;
     const {data, location} = this.props;
-    const {marketing} = data;
+    const {codeExamples, examples, marketing} = data;
+
+    const code = codeExamples.edges.reduce((lookup, {node}) => {
+      lookup[node.mdAbsolutePath] = node;
+      return lookup;
+    }, {});
+
     return (
       <Layout location={location}>
         <TitleAndMetaTags
@@ -236,6 +259,24 @@ class Home extends Component {
                   borderBottom: `1 solid ${colors.divider}`,
                 }}
               />
+              <section css={sectionStyles}>
+                <div id="examples">
+                  {examples.edges.map(({node}, index) => {
+                    const snippet = code[node.fileAbsolutePath];
+                    return (
+                      <CodeExample
+                        key={index}
+                        id={snippet.id}
+                        code={snippet.code}
+                        containerNodeID={node.frontmatter.domid}
+                        loaded={babelLoaded}>
+                        <h3 css={headingStyles}>{node.frontmatter.title}</h3>
+                        <div dangerouslySetInnerHTML={{__html: node.html}} />
+                      </CodeExample>
+                    );
+                  })}
+                </div>
+              </section>
             </div>
           </Container>
 
@@ -275,6 +316,7 @@ class Home extends Component {
 
 Home.propTypes = {
   data: PropTypes.shape({
+    examples: PropTypes.object.isRequired,
     marketing: PropTypes.object.isRequired,
   }).isRequired,
 };
@@ -316,6 +358,34 @@ const CtaItem = ({children, primary = false}) => (
 
 export const pageQuery = graphql`
   query IndexMarkdown {
+    codeExamples: allExampleCode {
+      edges {
+        node {
+          id
+          code
+          mdAbsolutePath
+        }
+      }
+    }
+
+    examples: allMarkdownRemark(
+      filter: {fileAbsolutePath: {regex: "//home/examples//"}}
+      sort: {fields: [frontmatter___order], order: ASC}
+    ) {
+      edges {
+        node {
+          fileAbsolutePath
+          fields {
+            slug
+          }
+          frontmatter {
+            title
+            domid
+          }
+          html
+        }
+      }
+    }
     marketing: allMarkdownRemark(
       filter: {fileAbsolutePath: {regex: "//home/marketing//"}}
       sort: {fields: [frontmatter___order], order: ASC}

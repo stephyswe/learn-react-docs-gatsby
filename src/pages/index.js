@@ -1,4 +1,12 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * @emails react-core
+ */
+
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {graphql} from 'gatsby';
 
 import Layout from 'components/Layout';
 import Container from 'components/Container';
@@ -15,6 +23,7 @@ import logoWhiteSvg from 'icons/logo-white.svg';
 class Home extends Component {
   render() {
     const {data, location} = this.props;
+    const {marketing} = data;
     return (
       <Layout location={location}>
         <TitleAndMetaTags
@@ -135,11 +144,140 @@ class Home extends Component {
               </div>
             </div>
           </header>
+
+          <Container>
+            <div css={sharedStyles.markdown}>
+              <section
+                css={[
+                  sectionStyles,
+                  {
+                    [media.lessThan('medium')]: {
+                      marginTop: 0,
+                      marginBottom: 0,
+                      overflowX: 'auto',
+                      paddingTop: 30,
+                      WebkitOverflowScrolling: 'touch',
+                      position: 'relative',
+                      maskImage:
+                        'linear-gradient(to right, transparent, white 10px, white 90%, transparent)',
+                    },
+                  },
+                ]}>
+                <div
+                  css={{
+                    display: 'flex',
+                    flexDirection: 'row',
+
+                    [media.lessThan('medium')]: {
+                      display: 'block',
+                      whiteSpace: 'nowrap',
+                    },
+                  }}>
+                  {marketing.edges.map(({node: column}, index) => (
+                    <div
+                      key={index}
+                      css={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flex: '0 1 33%',
+                        marginLeft: 40,
+
+                        '&:first-of-type': {
+                          marginLeft: 0,
+
+                          [media.lessThan('medium')]: {
+                            marginLeft: 10,
+                          },
+                        },
+
+                        [media.lessThan('medium')]: {
+                          display: 'inline-block',
+                          verticalAlign: 'top',
+                          marginLeft: 0,
+                          whiteSpace: 'normal',
+                          width: '75%',
+                          marginRight: 20,
+                          paddingBottom: 40,
+
+                          '&:first-of-type': {
+                            marginTop: 0,
+                          },
+                        },
+                      }}>
+                      <h3
+                        css={[
+                          headingStyles,
+                          {
+                            '&&': {
+                              // Make specificity higher than the site-wide h3 styles.
+                              color: colors.subtle,
+                              paddingTop: 0,
+                              fontWeight: 300,
+                              fontSize: 20,
+
+                              [media.greaterThan('xlarge')]: {
+                                fontSize: 24,
+                              },
+                            },
+                          },
+                        ]}>
+                        {column.frontmatter.title}
+                      </h3>
+                      <div dangerouslySetInnerHTML={{__html: column.html}} />
+                    </div>
+                  ))}
+                </div>
+              </section>
+              <hr
+                css={{
+                  height: 1,
+                  marginBottom: -1,
+                  border: 'none',
+                  borderBottom: `1 solid ${colors.divider}`,
+                }}
+              />
+            </div>
+          </Container>
+
+          <section
+            css={{
+              background: colors.dark,
+              color: colors.white,
+              paddingTop: 45,
+              paddingBottom: 25,
+            }}>
+            <Container>
+              <Flex
+                valign="center"
+                halign="center"
+                css={{
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                }}>
+                <CtaItem>
+                  <ButtonLink to="/docs/getting-started.html" type="primary">
+                    Get Started
+                  </ButtonLink>
+                </CtaItem>
+                <CtaItem>
+                  <ButtonLink to="/tutorial/tutorial.html" type="secondary">
+                    Take the Tutorial
+                  </ButtonLink>
+                </CtaItem>
+              </Flex>
+            </Container>
+          </section>
         </div>
       </Layout>
     );
   }
 }
+
+Home.propTypes = {
+  data: PropTypes.shape({
+    marketing: PropTypes.object.isRequired,
+  }).isRequired,
+};
 
 const CtaItem = ({children, primary = false}) => (
   <div
@@ -176,4 +314,38 @@ const CtaItem = ({children, primary = false}) => (
   </div>
 );
 
+export const pageQuery = graphql`
+  query IndexMarkdown {
+    marketing: allMarkdownRemark(
+      filter: {fileAbsolutePath: {regex: "//home/marketing//"}}
+      sort: {fields: [frontmatter___order], order: ASC}
+    ) {
+      edges {
+        node {
+          frontmatter {
+            title
+          }
+          html
+        }
+      }
+    }
+  }
+`;
+
 export default Home;
+
+const sectionStyles = {
+  marginTop: 20,
+  marginBottom: 15,
+
+  [media.greaterThan('medium')]: {
+    marginTop: 60,
+    marginBottom: 65,
+  },
+};
+
+const headingStyles = {
+  '&&': {
+    marginBottom: 20,
+  },
+};

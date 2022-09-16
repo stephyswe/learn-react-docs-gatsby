@@ -35,6 +35,7 @@ export const pageQuery = graphql`
       frontmatter {
         title
         next
+        prev
       }
       fields {
         path

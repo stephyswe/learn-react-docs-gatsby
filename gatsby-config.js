@@ -33,7 +33,16 @@ module.exports = {
     {
       resolve: 'gatsby-transformer-remark',
       options: {
-        plugins: ['gatsby-remark-header-custom-ids'],
+        plugins: [
+          'gatsby-remark-header-custom-ids',
+          'gatsby-remark-use-jsx',
+          {
+            resolve: 'gatsby-remark-prismjs',
+            options: {
+              classPrefix: 'gatsby-code-',
+            },
+          },
+        ],
       },
     },
   ],

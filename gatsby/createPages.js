@@ -14,6 +14,7 @@ module.exports = async ({graphql, actions}) => {
   // Used to detect and prevent duplicate redirects
   const redirectToSlugMap = {};
 
+  const communityTemplate = resolve(__dirname, '../src/templates/community.js');
   const docsTemplate = resolve(__dirname, '../src/templates/docs.js');
   const tutorialTemplate = resolve(__dirname, '../src/templates/tutorial.js');
 
@@ -50,9 +51,15 @@ module.exports = async ({graphql, actions}) => {
   allMarkdown.data.allMarkdownRemark.edges.forEach(edge => {
     const slug = edge.node.fields.slug;
 
-    if (slug.includes('docs/') || slug.includes('tutorial/')) {
+    if (
+      slug.includes('docs/') ||
+      slug.includes('community/') ||
+      slug.includes('tutorial/')
+    ) {
       let template;
-      if (slug.includes('docs/')) {
+      if (slug.includes('community/')) {
+        template = communityTemplate;
+      } else if (slug.includes('docs/')) {
         template = docsTemplate;
       } else if (slug.includes('tutorial/')) {
         template = tutorialTemplate;

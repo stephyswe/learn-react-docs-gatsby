@@ -1,4 +1,3 @@
-
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -20,6 +19,16 @@ type Props = {
 class Template extends Component<Props> {
   render() {
     const {children, location} = this.props;
+
+    // TODO - is there a better way to check if we need we have a sidebar?
+    let layoutHasSidebar = false;
+    if (
+      location.pathname.match(
+        /^\/(docs|tutorial|community|blog|contributing|warnings)/,
+      )
+    ) {
+      layoutHasSidebar = true;
+    }
 
     return (
       <div
@@ -49,7 +58,7 @@ class Template extends Component<Props> {
           }}>
           {children}
         </Flex>
-        <Footer />
+        <Footer layoutHasSidebar={layoutHasSidebar} />
       </div>
     );
   }

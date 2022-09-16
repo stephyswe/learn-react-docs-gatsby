@@ -11,8 +11,10 @@ import MarkdownHeader from 'components/MarkdownHeader';
 import NavigationFooter from 'templates/components/NavigationFooter';
 // $FlowFixMe Update Flow
 import React from 'react';
+import StickyResponsiveSidebar from 'components/StickyResponsiveSidebar';
 import TitleAndMetaTags from 'components/TitleAndMetaTags';
 import FeedbackForm from 'components/FeedbackForm';
+import findSectionForPath from 'utils/findSectionForPath';
 import toCommaSeparatedList from 'utils/toCommaSeparatedList';
 import createCanonicalUrl from 'utils/createCanonicalUrl';
 import {sharedStyles, colors, media, fonts} from 'theme';
@@ -137,6 +139,19 @@ const MarkdownPage = ({
                 )}
               </div>
             </Flex>
+
+            <div css={sharedStyles.articleLayout.sidebar}>
+              <StickyResponsiveSidebar
+                enableScrollSync={enableScrollSync}
+                createLink={createLink}
+                defaultActiveSection={findSectionForPath(
+                  location.pathname,
+                  sectionList,
+                )}
+                location={location}
+                sectionList={sectionList}
+              />
+            </div>
           </div>
         </Container>
       </div>

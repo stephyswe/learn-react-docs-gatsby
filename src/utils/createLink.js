@@ -7,6 +7,7 @@
 
 import {Link} from 'gatsby';
 import React from 'react';
+import ExternalLinkSvg from 'templates/components/ExternalLinkSvg';
 import slugify from 'utils/slugify';
 import {colors, media} from 'theme';
 
@@ -16,6 +17,33 @@ type CreateLinkBaseProps = {
   isActive: boolean,
   item: Object,
   section: Object,
+};
+
+const createLinkCommunity = ({
+  isActive,
+  item,
+  section,
+}: CreateLinkBaseProps): Node => {
+  if (item.href) {
+    return (
+      <a css={[linkCss]} href={item.href} target="_blank" rel="noopener">
+        {item.title}
+        <ExternalLinkSvg
+          cssProps={{
+            verticalAlign: -2,
+            display: 'inline-block',
+            marginLeft: 5,
+            color: colors.subtle,
+          }}
+        />
+      </a>
+    );
+  }
+  return createLinkDocs({
+    isActive,
+    item,
+    section,
+  });
 };
 
 const createLinkDocs = ({
@@ -84,4 +112,4 @@ const linkCss = {
   },
 };
 
-export {createLinkDocs, createLinkTutorial};
+export {createLinkCommunity, createLinkDocs, createLinkTutorial};

@@ -41,6 +41,13 @@ module.exports = {
             },
           },
           'gatsby-remark-header-custom-ids',
+          {
+            resolve: 'gatsby-remark-embed-snippet',
+            options: {
+              classPrefix: 'gatsby-code-',
+              directory: `${__dirname}/examples/`,
+            },
+          },
           'gatsby-remark-use-jsx',
           {
             resolve: 'gatsby-remark-prismjs',
@@ -48,6 +55,7 @@ module.exports = {
               classPrefix: 'gatsby-code-',
             },
           },
+          'gatsby-remark-copy-linked-files',
         ],
       },
     },

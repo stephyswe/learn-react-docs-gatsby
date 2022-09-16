@@ -13,7 +13,14 @@ import ChevronSvg from '../ChevronSvg';
 class Section extends React.Component {
   state = {uid: ('' + Math.random()).replace(/\D/g, '')};
   render() {
-    const {createLink, isActive, onLinkClick, onSectionTitleClick, section} = this.props;
+    const {
+      createLink,
+      isActive,
+      location,
+      onLinkClick,
+      onSectionTitleClick,
+      section,
+    } = this.props;
     const uid = 'section_' + this.state.uid;
     return (
       <div>

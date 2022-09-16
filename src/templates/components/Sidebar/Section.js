@@ -14,8 +14,10 @@ class Section extends React.Component {
   state = {uid: ('' + Math.random()).replace(/\D/g, '')};
   render() {
     const {
+      activeItemId,
       createLink,
       isActive,
+      isScrollSync,
       location,
       onLinkClick,
       onSectionTitleClick,
@@ -76,7 +78,9 @@ class Section extends React.Component {
                 marginTop: 5,
               }}>
               {createLink({
-                isActive: isItemActive(location, item),
+                isActive: isScrollSync
+                  ? activeItemId === item.id
+                  : isItemActive(location, item),
                 item: section.isOrdered
                   ? {...item, title: `${index + 1}. ${item.title}`}
                   : item,
@@ -90,7 +94,9 @@ class Section extends React.Component {
                   {item.subitems.map(subitem => (
                     <li key={subitem.id}>
                       {createLink({
-                        isActive: isItemActive(location, subitem),
+                        isActive: isScrollSync
+                          ? activeItemId === subitem.id
+                          : isItemActive(location, subitem),
                         item: subitem,
                         location,
                         onLinkClick,

@@ -15,6 +15,7 @@ module.exports = async ({graphql, actions}) => {
   const redirectToSlugMap = {};
 
   const docsTemplate = resolve(__dirname, '../src/templates/docs.js');
+  const tutorialTemplate = resolve(__dirname, '../src/templates/tutorial.js');
 
   // Redirect /index.html to root.
   createRedirect({
@@ -49,10 +50,12 @@ module.exports = async ({graphql, actions}) => {
   allMarkdown.data.allMarkdownRemark.edges.forEach(edge => {
     const slug = edge.node.fields.slug;
 
-    if (slug.includes('docs/')) {
+    if (slug.includes('docs/') || slug.includes('tutorial/')) {
       let template;
       if (slug.includes('docs/')) {
         template = docsTemplate;
+      } else if (slug.includes('tutorial/')) {
+        template = tutorialTemplate;
       }
 
       const createArticlePage = path =>

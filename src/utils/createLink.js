@@ -33,6 +33,27 @@ const createLinkDocs = ({
   );
 };
 
+type CreateLinkTutorialProps = {
+  onLinkClick: Function,
+} & CreateLinkBaseProps;
+
+const createLinkTutorial = ({
+  isActive,
+  item,
+  onLinkClick,
+  section,
+}: CreateLinkTutorialProps): Node => {
+  return (
+    <Link
+      css={[linkCss, isActive && activeLinkCss]}
+      onClick={onLinkClick}
+      to={item.href}>
+      {isActive && <span css={activeLinkBefore} />}
+      {item.title}
+    </Link>
+  );
+};
+
 const activeLinkCss = {
   fontWeight: 700,
 };
@@ -63,4 +84,4 @@ const linkCss = {
   },
 };
 
-export {createLinkDocs};
+export {createLinkDocs, createLinkTutorial};

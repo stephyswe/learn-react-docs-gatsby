@@ -45,6 +45,7 @@ class Sidebar extends Component {
             createLink={createLink}
             isActive={activeSection === section || sectionList.length === 1}
             key={index}
+            onLinkClick={closeParentMenu}
             onSectionTitleClick={() => this._toggleSection(section)}
             section={section}
           />

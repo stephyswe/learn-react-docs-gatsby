@@ -6,13 +6,14 @@
 
 import React from 'react';
 import {colors, media} from 'theme';
+import isItemActive from 'utils/isItemActive';
 import MetaTitle from '../MetaTitle';
 import ChevronSvg from '../ChevronSvg';
 
 class Section extends React.Component {
   state = {uid: ('' + Math.random()).replace(/\D/g, '')};
   render() {
-    const {isActive, onSectionTitleClick, section} = this.props;
+    const {createLink, isActive, onLinkClick, onSectionTitleClick, section} = this.props;
     const uid = 'section_' + this.state.uid;
     return (
       <div>
@@ -60,7 +61,41 @@ class Section extends React.Component {
             [media.greaterThan('small')]: {
               display: isActive ? 'block' : 'none',
             },
-          }}></ul>
+          }}>
+          {section.items.map((item, index) => (
+            <li
+              key={item.id}
+              css={{
+                marginTop: 5,
+              }}>
+              {createLink({
+                isActive: isItemActive(location, item),
+                item: section.isOrdered
+                  ? {...item, title: `${index + 1}. ${item.title}`}
+                  : item,
+                location,
+                onLinkClick,
+                section,
+              })}
+
+              {item.subitems && (
+                <ul css={{marginLeft: 20}}>
+                  {item.subitems.map(subitem => (
+                    <li key={subitem.id}>
+                      {createLink({
+                        isActive: isItemActive(location, subitem),
+                        item: subitem,
+                        location,
+                        onLinkClick,
+                        section,
+                      })}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }

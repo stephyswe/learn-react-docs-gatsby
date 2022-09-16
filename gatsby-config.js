@@ -14,15 +14,8 @@ module.exports = {
     rssFeedDescription: 'A JavaScript library for building user interfaces',
   },
   plugins: [
-    'gatsby-plugin-glamor',
     'gatsby-transformer-home-example-code',
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        name: 'content',
-        path: `${__dirname}/content/`,
-      },
-    },
+    'gatsby-plugin-glamor',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
@@ -31,9 +24,22 @@ module.exports = {
       },
     },
     {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'content',
+        path: `${__dirname}/content/`,
+      },
+    },
+    {
       resolve: 'gatsby-transformer-remark',
       options: {
         plugins: [
+          {
+            resolve: 'gatsby-remark-images',
+            options: {
+              maxWidth: 840,
+            },
+          },
           'gatsby-remark-header-custom-ids',
           'gatsby-remark-use-jsx',
           {
@@ -45,5 +51,7 @@ module.exports = {
         ],
       },
     },
+    'gatsby-transformer-sharp',
+    'gatsby-plugin-sharp',
   ],
 };

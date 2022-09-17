@@ -20,6 +20,7 @@ module.exports = {
     'gatsby-transformer-authors-yaml',
     'gatsby-transformer-home-example-code',
     'gatsby-plugin-glamor',
+    'gatsby-plugin-twitter',
     {
       resolve: 'gatsby-source-filesystem',
       options: {

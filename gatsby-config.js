@@ -13,7 +13,11 @@ module.exports = {
     rssFeedTitle: 'React',
     rssFeedDescription: 'A JavaScript library for building user interfaces',
   },
+  mapping: {
+    'MarkdownRemark.frontmatter.author': 'AuthorYaml',
+  },
   plugins: [
+    'gatsby-transformer-authors-yaml',
     'gatsby-transformer-home-example-code',
     'gatsby-plugin-glamor',
     {

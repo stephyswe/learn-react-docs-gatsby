@@ -19,6 +19,19 @@ type CreateLinkBaseProps = {
   section: Object,
 };
 
+const createLinkBlog = ({
+  isActive,
+  item,
+  section,
+}: CreateLinkBaseProps): Node => {
+  return (
+    <Link css={[linkCss, isActive && activeLinkCss]} to={item.id}>
+      {isActive && <span css={activeLinkBefore} />}
+      {item.title}
+    </Link>
+  );
+};
+
 const createLinkCommunity = ({
   isActive,
   item,
@@ -112,4 +125,9 @@ const linkCss = {
   },
 };
 
-export {createLinkCommunity, createLinkDocs, createLinkTutorial};
+export {
+  createLinkBlog,
+  createLinkCommunity,
+  createLinkDocs,
+  createLinkTutorial,
+};

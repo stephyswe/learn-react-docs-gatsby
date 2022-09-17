@@ -14,6 +14,7 @@ module.exports = async ({graphql, actions}) => {
   // Used to detect and prevent duplicate redirects
   const redirectToSlugMap = {};
 
+  const blogTemplate = resolve(__dirname, '../src/templates/blog.js');
   const communityTemplate = resolve(__dirname, '../src/templates/community.js');
   const docsTemplate = resolve(__dirname, '../src/templates/docs.js');
   const tutorialTemplate = resolve(__dirname, '../src/templates/tutorial.js');
@@ -52,12 +53,15 @@ module.exports = async ({graphql, actions}) => {
     const slug = edge.node.fields.slug;
 
     if (
-      slug.includes('docs/') ||
+      slug.includes('blog/') ||
       slug.includes('community/') ||
+      slug.includes('docs/') ||
       slug.includes('tutorial/')
     ) {
       let template;
-      if (slug.includes('community/')) {
+      if (slug.includes('blog/')) {
+        template = blogTemplate;
+      } else if (slug.includes('community/')) {
         template = communityTemplate;
       } else if (slug.includes('docs/')) {
         template = docsTemplate;
@@ -108,5 +112,36 @@ module.exports = async ({graphql, actions}) => {
         });
       }
     }
+  });
+
+  const newestBlogEntry = await graphql(
+    `
+      {
+        allMarkdownRemark(
+          limit: 1
+          filter: {fileAbsolutePath: {regex: "/blog/"}}
+          sort: {fields: [fields___date], order: DESC}
+        ) {
+          edges {
+            node {
+              fields {
+                slug
+              }
+            }
+          }
+        }
+      }
+    `,
+  );
+
+  const newestBlogNode = newestBlogEntry.data.allMarkdownRemark.edges[0].node;
+
+  // Blog landing page should always show the most recent blog entry.
+  ['/blog/', '/blog'].map(slug => {
+    createRedirect({
+      fromPath: slug,
+      redirectInBrowser: true,
+      toPath: newestBlogNode.fields.slug,
+    });
   });
 };
